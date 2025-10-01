@@ -1,0 +1,99 @@
+
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+    provider = "prisma-client-js"
+    binaryTargets = ["native", "linux-musl-arm64-openssl-3.0.x"]
+    output = "/home/ubuntu/recreacion_jalm_replica/app/node_modules/.prisma/client"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  order       Int       @default(0)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  services    Service[]
+  
+  @@map("categories")
+}
+
+model Service {
+  id          String   @id @default(cuid())
+  name        String
+  slug        String   @unique
+  description String?
+  shortDesc   String?
+  images      Image[]
+  categoryId  String
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  features    String[] // Array of features/characteristics
+  ageRange    String?  // e.g., "6+ años", "1-5 años"
+  space       String?  // e.g., "Abierto o Cerrado"
+  price       Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@map("services")
+}
+
+model Package {
+  id              String   @id @default(cuid())
+  name            String
+  slug            String   @unique
+  description     String
+  shortDesc       String?
+  duration        String   // e.g., "3 horas", "4 horas"
+  basesCount      Int?     // Number of bases/stations
+  ageRange        String   // e.g., "6+ años"
+  space           String   @default("Abierto o Cerrado") // e.g., "Abierto o Cerrado"
+  includeMegaInflatable Boolean @default(false)
+  includeMusicalFinale  Boolean @default(false)
+  activities      String[] // Array of activities included
+  images          Image[]
+  price           Float?
+  isActive        Boolean  @default(true)
+  isFeatured      Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  
+  @@map("packages")
+}
+
+model Image {
+  id        String   @id @default(cuid())
+  url       String
+  alt       String?
+  order     Int      @default(0)
+  serviceId String?
+  service   Service? @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  packageId String?
+  package   Package? @relation(fields: [packageId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  
+  @@map("images")
+}
+
+model ContactRequest {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String?
+  message   String
+  phone     String?
+  eventType String?  // Type of event or service interested in
+  status    String   @default("pending") // pending, contacted, closed
+  createdAt DateTime @default(now())
+  
+  @@map("contact_requests")
+}

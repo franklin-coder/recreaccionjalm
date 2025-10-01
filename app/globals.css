@@ -1,0 +1,142 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap');
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 207 13% 43%;
+    
+    --card: 0 0% 100%;
+    --card-foreground: 207 13% 43%;
+    
+    --popover: 0 0% 100%;
+    --popover-foreground: 207 13% 43%;
+    
+    --primary: 224 100% 26%;
+    --primary-foreground: 0 0% 100%;
+    
+    --secondary: 183 74% 58%;
+    --secondary-foreground: 0 0% 100%;
+    
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    
+    --accent: 210 40% 96%;
+    --accent-foreground: 207 13% 43%;
+    
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 224 100% 26%;
+    
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Montserrat', sans-serif;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+  }
+}
+
+@layer components {
+  .container-jalm {
+    @apply w-full max-w-[1480px] mx-auto px-4 sm:px-6 lg:px-8;
+  }
+  
+  .btn-jalm-primary {
+    @apply bg-[#002486] hover:bg-[#1e40af] text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg;
+  }
+  
+  .btn-jalm-secondary {
+    @apply bg-[#4ECDC4] hover:bg-[#45B7B8] text-white font-semibold py-3 px-6 rounded-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg;
+  }
+  
+  .card-jalm {
+    @apply bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-gray-100;
+  }
+  
+  .hero-gradient {
+    background: linear-gradient(135deg, #002486 0%, #4ECDC4 100%);
+  }
+  
+  .text-jalm-blue {
+    color: #002486;
+  }
+  
+  .text-jalm-teal {
+    color: #4ECDC4;
+  }
+  
+  .bg-jalm-blue {
+    background-color: #002486;
+  }
+  
+  .bg-jalm-teal {
+    background-color: #4ECDC4;
+  }
+  
+  /* Legacy support - mantenemos las clases orange por compatibilidad */
+  .text-jalm-orange {
+    color: #002486;
+  }
+  
+  .bg-jalm-orange {
+    background-color: #002486;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#002486] rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#1e40af];
+}
+
+/* Animation for counters */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-count-up {
+  animation: countUp 0.6s ease-out;
+}
+
+/* Parallax effect */
+.parallax {
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-gray-200 rounded;
+}

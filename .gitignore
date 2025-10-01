@@ -1,0 +1,78 @@
+# Dependencias
+node_modules/
+.pnp/
+.pnp.cjs
+.pnpm-store/
+
+# Compilados / builds
+.next/
+out/
+dist/
+build/
+.turbo/
+.vercel/
+
+# Caches
+.cache/
+.next/cache/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+
+# Logs
+logs/
+*.log
+*.log.*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# SO / editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Test
+coverage/
+.jest/
+.vitest/
+
+# Bases de datos locales (ej. Prisma/SQLite)
+prisma/*.db
+prisma/*.sqlite
+*.sqlite
+*.sqlite-journal
+
+# Yarn Berry (opcional, si usas Yarn 2/3)
+# .yarn/*
+# !.yarn/patches
+# !.yarn/releases
+# !.yarn/plugins
+# !.yarn/sdks
+# !.yarn/versions
+
+node_modules/
+.next/
+out/
+dist/
+.env
+.env.local
+.env.*.local
+.DS_Store
+.vscode/
+npm-debug.log
+yarn-error.log
