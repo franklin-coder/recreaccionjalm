@@ -39,10 +39,26 @@ export default function PackagesPage() {
       if (showFeaturedOnly) params.append('featured', 'true')
 
       const response = await fetch(`/api/packages?${params.toString()}`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
+      
       const data = await response.json()
-      setPackages(data)
+      
+      // Asegurar que data sea un array
+      if (Array.isArray(data)) {
+        setPackages(data)
+      } else if (data && typeof data === 'object' && data.error) {
+        console.error('API error:', data.error, data.details)
+        setPackages([])
+      } else {
+        console.error('Unexpected data format:', data)
+        setPackages([])
+      }
     } catch (error) {
       console.error('Error fetching packages:', error)
+      setPackages([])
     } finally {
       setLoading(false)
     }

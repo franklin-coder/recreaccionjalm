@@ -32,6 +32,7 @@
     "typescript": "5.8.3"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
     "@floating-ui/react": "0.26.0",
     "@headlessui/react": "1.7.18",
     "@hookform/resolvers": "3.9.0",
