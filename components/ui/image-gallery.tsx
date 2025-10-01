@@ -50,6 +50,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
     <>
       <div className="space-y-4">
         {/* Main Image */}
+
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -59,6 +60,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
         >
           <div className="relative aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl bg-gray-100">
             <AnimatePresence mode="wait">
+
               <motion.div
                 key={selectedImageIndex}
                 initial={{ opacity: 0 }}
@@ -106,6 +108,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
 
         {/* Thumbnail Gallery */}
         {images.length > 1 && (
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -156,6 +159,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
       {/* Lightbox Modal */}
       <AnimatePresence>
         {isLightboxOpen && (
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -190,6 +194,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
             )}
 
             {/* Main lightbox image */}
+
             <motion.div
               initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
@@ -199,6 +204,7 @@ export function ImageGallery({ images, productName }: ImageGalleryProps) {
             >
               <div className="relative aspect-[4/3] w-full">
                 <AnimatePresence mode="wait">
+
                   <motion.div
                     key={selectedImageIndex}
                     initial={{ opacity: 0 }}

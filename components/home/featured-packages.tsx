@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, Users, Star, ArrowRight } from 'lucide-react'
@@ -45,6 +45,7 @@ export function FeaturedPackages() {
     <section className="py-20 bg-white">
       <div className="container-jalm">
         {/* Header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -63,6 +64,7 @@ export function FeaturedPackages() {
         {/* Packages Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
           {featuredPackages.map((pkg, index) => (
+
             <motion.div
               key={pkg.title}
               initial={{ opacity: 0, y: 50 }}
@@ -145,6 +147,7 @@ export function FeaturedPackages() {
         </div>
 
         {/* Bottom CTA */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}

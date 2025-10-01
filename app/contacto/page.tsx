@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import { Phone, MessageCircle, Mail, MapPin, Clock, Send, CheckCircle } from 'lucide-react'
 
 export default function ContactPage() {
@@ -60,6 +60,7 @@ export default function ContactPage() {
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="container-jalm py-12">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -81,6 +82,7 @@ export default function ContactPage() {
       <section className="py-12">
         <div className="container-jalm">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -100,6 +102,8 @@ export default function ContactPage() {
                 Llamar ahora
               </a>
             </motion.div>
+
+
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -124,6 +128,8 @@ export default function ContactPage() {
               </a>
             </motion.div>
 
+
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -143,6 +149,8 @@ export default function ContactPage() {
                 Enviar email
               </a>
             </motion.div>
+
+
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -164,6 +172,7 @@ export default function ContactPage() {
           {/* Main Contact Section */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             {/* Contact Form */}
+
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -180,6 +189,7 @@ export default function ContactPage() {
               </p>
 
               {isSubmitted ? (
+
                 <motion.div
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -322,6 +332,7 @@ export default function ContactPage() {
             </motion.div>
 
             {/* Location Info */}
+
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               whileInView={{ opacity: 1, x: 0 }}

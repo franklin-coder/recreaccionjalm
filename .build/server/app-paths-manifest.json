@@ -1,0 +1,16 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/eventos-corporativos/page": "app/eventos-corporativos/page.js",
+  "/galeria/page": "app/galeria/page.js",
+  "/contacto/page": "app/contacto/page.js",
+  "/page": "app/page.js",
+  "/paquetes/[slug]/page": "app/paquetes/[slug]/page.js",
+  "/paquetes/page": "app/paquetes/page.js",
+  "/servicios/[category]/[slug]/page": "app/servicios/[category]/[slug]/page.js",
+  "/servicios/[category]/page": "app/servicios/[category]/page.js",
+  "/servicios/page": "app/servicios/page.js",
+  "/api/categories/route": "app/api/categories/route.js",
+  "/api/packages/route": "app/api/packages/route.js",
+  "/api/contact/route": "app/api/contact/route.js",
+  "/api/services/route": "app/api/services/route.js"
+}

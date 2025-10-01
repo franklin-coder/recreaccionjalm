@@ -4,7 +4,7 @@ import { Badge } from './badge'
 import { Checkbox } from './checkbox'
 import { Button } from './button'
 import { Pencil, Trash2 } from 'lucide-react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 
 interface TaskCardProps {
   id: string
@@ -28,6 +28,7 @@ export function TaskCard({
   onEdit,
 }: TaskCardProps) {
   return (
+
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}

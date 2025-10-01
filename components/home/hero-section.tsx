@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Star, Users, Calendar } from 'lucide-react'
@@ -24,6 +24,7 @@ export function HeroSection() {
       <div className="container-jalm relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Text Content */}
+
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -31,6 +32,7 @@ export function HeroSection() {
             className="text-white space-y-8"
           >
             <div className="space-y-4">
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -68,6 +70,7 @@ export function HeroSection() {
             </div>
 
             {/* Stats */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -98,6 +101,7 @@ export function HeroSection() {
             </motion.div>
 
             {/* CTA Buttons */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -119,6 +123,7 @@ export function HeroSection() {
           </motion.div>
 
           {/* Hero Image */}
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -134,6 +139,7 @@ export function HeroSection() {
                 priority
               />
               {/* Floating elements */}
+
               <motion.div
                 animate={{ y: [-10, 10, -10] }}
                 transition={{ duration: 3, repeat: Infinity }}
@@ -141,6 +147,7 @@ export function HeroSection() {
               >
                 ¡Diversión garantizada!
               </motion.div>
+
               <motion.div
                 animate={{ y: [10, -10, 10] }}
                 transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
@@ -154,6 +161,7 @@ export function HeroSection() {
       </div>
 
       {/* Scroll indicator */}
+
       <motion.div
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}

@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, Users, Star, ArrowRight, Music, Zap } from 'lucide-react'
@@ -29,6 +29,7 @@ export function PackageCard({ package: pkg, index }: PackageCardProps) {
   const imageAlt = pkg.images[0]?.alt || pkg.name
 
   return (
+
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
