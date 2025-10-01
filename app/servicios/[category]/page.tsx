@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import { useParams } from 'next/navigation'
 import { ServiceCard } from '@/components/ui/service-card'
 import { ArrowLeft, Search } from 'lucide-react'
@@ -55,6 +55,7 @@ export default function CategoryPage() {
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="container-jalm py-12">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

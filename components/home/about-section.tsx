@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Image from 'next/image'
 import { Award, Users, Calendar, Shield, Heart, Star } from 'lucide-react'
 
@@ -41,6 +41,7 @@ export function AboutSection() {
       <div className="container-jalm">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Content */}
+
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -81,6 +82,7 @@ export function AboutSection() {
             </div>
 
             {/* Stats */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -89,6 +91,7 @@ export function AboutSection() {
               className="grid grid-cols-2 gap-6"
             >
               {stats.map((stat, index) => (
+
                 <motion.div
                   key={stat.label}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -106,6 +109,7 @@ export function AboutSection() {
           </motion.div>
 
           {/* Image + Values */}
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -123,14 +127,15 @@ export function AboutSection() {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
               <div className="absolute bottom-6 left-6 text-white">
-                <h3 className="text-2xl font-bold mb-2">30+ Años de Experiencia</h3>
-                <p className="text-lg opacity-90">Creando momentos inolvidables!</p>
+                <h3 className="text-2xl font-bold mb-2">30+ Años de Experiencias Unicas</h3>
+                <p className="text-lg opacity-90">Creando momentos inolvidables</p>
               </div>
             </div>
 
             {/* Values Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {values.map((value, index) => (
+
                 <motion.div
                   key={value.title}
                   initial={{ opacity: 0, y: 20 }}

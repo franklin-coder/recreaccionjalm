@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import { useParams } from 'next/navigation'
 import { ArrowLeft, Users, MapPin, Star, Phone, MessageCircle } from 'lucide-react'
 import Link from 'next/link'
@@ -102,6 +102,7 @@ export default function ServiceDetailPage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
             {/* Images */}
+
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -114,6 +115,7 @@ export default function ServiceDetailPage() {
             </motion.div>
 
             {/* Service Info */}
+
             <motion.div
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}

@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Users, Zap, Heart, Award, Gamepad2, Building } from 'lucide-react'
@@ -62,6 +62,7 @@ export function ServicesGrid() {
     <section className="py-20 bg-gray-50">
       <div className="container-jalm">
         {/* Header */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -80,6 +81,7 @@ export function ServicesGrid() {
         {/* Services Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {services.map((service, index) => (
+
             <motion.div
               key={service.title}
               initial={{ opacity: 0, y: 50 }}
@@ -129,6 +131,7 @@ export function ServicesGrid() {
         </div>
 
         {/* Bottom CTA */}
+
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
