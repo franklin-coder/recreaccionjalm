@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import { PackageCard } from '@/components/ui/package-card'
 import { Search, Filter, Star, Clock, Users } from 'lucide-react'
 
@@ -56,6 +56,7 @@ export default function PackagesPage() {
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="container-jalm py-12">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -131,6 +132,7 @@ export default function PackagesPage() {
           {/* Featured Packages */}
           {!loading && !showFeaturedOnly && featuredPackages.length > 0 && (
             <div className="mb-16">
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -158,6 +160,7 @@ export default function PackagesPage() {
           {!loading && (
             <div>
               {!showFeaturedOnly && regularPackages.length > 0 && (
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -212,6 +215,7 @@ export default function PackagesPage() {
       <section className="bg-white py-16">
         <div className="container-jalm">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -226,6 +230,8 @@ export default function PackagesPage() {
               </p>
             </motion.div>
 
+
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -239,6 +245,8 @@ export default function PackagesPage() {
                 Desde los más pequeños hasta adultos, tenemos opciones para todos
               </p>
             </motion.div>
+
+
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}

@@ -2,7 +2,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import { ServiceCard } from '@/components/ui/service-card'
 import { FilterSidebar } from '@/components/ui/filter-sidebar'
 import { Search, Grid, List } from 'lucide-react'
@@ -87,6 +87,7 @@ export default function ServicesPage() {
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="container-jalm py-12">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}

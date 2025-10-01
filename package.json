@@ -3,9 +3,10 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "tsx --require dotenv/config scripts/seed.ts"
@@ -82,7 +83,7 @@
     "dotenv": "16.5.0",
     "embla-carousel-react": "8.3.0",
     "formik": "2.4.5",
-    "framer-motion": "10.18.0",
+    "framer-motion": "^12.23.22",
     "gray-matter": "4.0.3",
     "input-otp": "1.2.4",
     "jotai": "2.6.0",

@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Phone, MessageCircle, Mail, ArrowRight, Clock, MapPin } from 'lucide-react'
@@ -22,6 +22,7 @@ export function ContactCTA() {
       <div className="container-jalm relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           {/* Content */}
+
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -53,6 +54,7 @@ export function ContactCTA() {
             </div>
 
             {/* Contact Options */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -92,6 +94,7 @@ export function ContactCTA() {
             </motion.div>
 
             {/* CTA Buttons */}
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -120,6 +123,7 @@ export function ContactCTA() {
           </motion.div>
 
           {/* Contact Card */}
+
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}

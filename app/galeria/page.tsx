@@ -2,7 +2,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Image from 'next/image'
 import { X, ChevronLeft, ChevronRight, Camera, Play } from 'lucide-react'
 
@@ -145,6 +145,7 @@ export default function GaleriaPage() {
       {/* Header */}
       <section className="bg-white border-b border-gray-200">
         <div className="container-jalm py-12">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -189,6 +190,7 @@ export default function GaleriaPage() {
       {/* Gallery Grid */}
       <section className="py-12">
         <div className="container-jalm">
+
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -196,6 +198,7 @@ export default function GaleriaPage() {
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
           >
             {filteredItems.map((item, index) => (
+
               <motion.div
                 key={item.id}
                 initial={{ opacity: 0, y: 50 }}
@@ -301,6 +304,7 @@ export default function GaleriaPage() {
       {/* Bottom CTA */}
       <section className="bg-gradient-to-br from-jalm-orange to-jalm-teal text-white py-16">
         <div className="container-jalm text-center">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}

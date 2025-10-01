@@ -1,7 +1,7 @@
 
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, HTMLMotionProps } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Building, Users, Target, Award, ArrowRight, CheckCircle, Phone, MessageCircle } from 'lucide-react'
@@ -59,6 +59,7 @@ export default function EventosCorporativosPage() {
 
         <div className="container-jalm relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
@@ -66,6 +67,7 @@ export default function EventosCorporativosPage() {
               className="text-white space-y-8"
             >
               <div className="space-y-4">
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -99,6 +101,8 @@ export default function EventosCorporativosPage() {
                 </motion.p>
               </div>
 
+
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -113,6 +117,8 @@ export default function EventosCorporativosPage() {
                 </Link>
               </motion.div>
             </motion.div>
+
+
 
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -136,6 +142,7 @@ export default function EventosCorporativosPage() {
       {/* Services Section */}
       <section className="py-20 bg-white">
         <div className="container-jalm">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -154,6 +161,7 @@ export default function EventosCorporativosPage() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {corporateServices.map((service, index) => (
+
               <motion.div
                 key={service.title}
                 initial={{ opacity: 0, y: 50 }}
@@ -189,6 +197,7 @@ export default function EventosCorporativosPage() {
       <section className="py-20 bg-gradient-to-br from-gray-50 to-gray-100">
         <div className="container-jalm">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -208,6 +217,7 @@ export default function EventosCorporativosPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {benefits.map((benefit, index) => (
+
                   <motion.div
                     key={benefit}
                     initial={{ opacity: 0, y: 20 }}
@@ -222,6 +232,8 @@ export default function EventosCorporativosPage() {
                 ))}
               </div>
             </motion.div>
+
+
 
             <motion.div
               initial={{ opacity: 0, x: 50 }}
@@ -251,6 +263,7 @@ export default function EventosCorporativosPage() {
       {/* CTA Section */}
       <section className="py-20 bg-gradient-to-br from-jalm-orange to-jalm-teal text-white">
         <div className="container-jalm text-center">
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
