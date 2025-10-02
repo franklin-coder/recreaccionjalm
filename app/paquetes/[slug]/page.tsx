@@ -191,20 +191,22 @@ export default function PackageDetailPage() {
               </div>
 
               {/* Activities */}
-              <div className="bg-white p-6 rounded-lg shadow-sm">
-                <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
-                  <Star className="h-5 w-5 text-jalm-orange mr-2" />
-                  Actividades Incluidas
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {packageData.activities.map((activity, index) => (
-                    <div key={index} className="flex items-center">
-                      <div className="w-2 h-2 bg-jalm-teal rounded-full mr-3" />
-                      <span className="text-gray-700">{activity}</span>
-                    </div>
-                  ))}
+              {packageData.activities && packageData.activities.length > 0 && (
+                <div className="bg-white p-6 rounded-lg shadow-sm">
+                  <h3 className="text-lg font-bold text-gray-900 mb-4 flex items-center">
+                    <Star className="h-5 w-5 text-jalm-orange mr-2" />
+                    Actividades Incluidas
+                  </h3>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    {packageData.activities.map((activity, index) => (
+                      <div key={index} className="flex items-center">
+                        <div className="w-2 h-2 bg-jalm-teal rounded-full mr-3" />
+                        <span className="text-gray-700">{activity}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* CTA Buttons */}
               <div className="space-y-4">
