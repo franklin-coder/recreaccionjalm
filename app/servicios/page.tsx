@@ -38,8 +38,9 @@ export default function ServicesPage() {
   const [searchQuery, setSearchQuery] = useState<string>('')
 
   // Get unique filter options
-  const ageRanges = Array.from(new Set(services.map(s => s.ageRange).filter(Boolean))) as string[]
-  const spaceTypes = Array.from(new Set(services.map(s => s.space).filter(Boolean))) as string[]
+  const serviceList = Array.isArray(services) ? services : []
+  const ageRanges = Array.from(new Set(serviceList.map(s => s.ageRange).filter(Boolean))) as string[]
+  const spaceTypes = Array.from(new Set(serviceList.map(s => s.space).filter(Boolean))) as string[]
 
   useEffect(() => {
     fetchCategories()
@@ -67,9 +68,17 @@ export default function ServicesPage() {
 
       const response = await fetch(`/api/services?${params.toString()}`)
       const data = await response.json()
-      setServices(data)
+      
+      // Ensure we always set an array, even if API returns an error object
+      if (Array.isArray(data)) {
+        setServices(data)
+      } else {
+        console.error('API returned non-array data:', data)
+        setServices([])
+      }
     } catch (error) {
       console.error('Error fetching services:', error)
+      setServices([])
     } finally {
       setLoading(false)
     }
@@ -139,7 +148,7 @@ export default function ServicesPage() {
                     }
                   </h2>
                   <p className="text-gray-600">
-                    {loading ? 'Cargando...' : `${services.length} servicios encontrados`}
+                    {loading ? 'Cargando...' : `${serviceList.length} servicios encontrados`}
                   </p>
                 </div>
 
@@ -188,13 +197,13 @@ export default function ServicesPage() {
               )}
 
               {/* Services grid */}
-              {!loading && services.length > 0 && (
+              {!loading && serviceList.length > 0 && (
                 <div className={`grid gap-6 ${
                   viewMode === 'grid' 
                     ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
                     : 'grid-cols-1'
                 }`}>
-                  {services.map((service, index) => (
+                  {serviceList.map((service, index) => (
                     <ServiceCard 
                       key={service.id} 
                       service={service} 
@@ -205,7 +214,7 @@ export default function ServicesPage() {
               )}
 
               {/* No results */}
-              {!loading && services.length === 0 && (
+              {!loading && serviceList.length === 0 && (
                 <div className="text-center py-12">
                   <Search className="h-16 w-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-600 mb-2">

@@ -159,6 +159,11 @@ function FilterContent({
   expandedSections,
   toggleSection
 }: FilterContentProps) {
+  // Ensure all filter arrays are valid arrays before rendering
+  const categoryList = Array.isArray(categories) ? categories : []
+  const ageRangeList = Array.isArray(ageRanges) ? ageRanges : []
+  const spaceTypeList = Array.isArray(spaceTypes) ? spaceTypes : []
+
   return (
     <div className="space-y-6">
       {/* Search */}
@@ -197,18 +202,22 @@ function FilterContent({
               />
               <span className="text-gray-700">Todas</span>
             </label>
-            {categories.map((category) => (
-              <label key={category.id} className="flex items-center">
-                <input
-                  type="radio"
-                  name="category"
-                  checked={selectedCategory === category.slug}
-                  onChange={() => onCategoryChange(category.slug)}
-                  className="mr-3 text-jalm-orange"
-                />
-                <span className="text-gray-700">{category.name}</span>
-              </label>
-            ))}
+            {categoryList.length > 0 ? (
+              categoryList.map((category) => (
+                <label key={category.id} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="category"
+                    checked={selectedCategory === category.slug}
+                    onChange={() => onCategoryChange(category.slug)}
+                    className="mr-3 text-jalm-orange"
+                  />
+                  <span className="text-gray-700">{category.name}</span>
+                </label>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 italic">No hay categorías disponibles</p>
+            )}
           </div>
         )}
       </div>
@@ -234,18 +243,22 @@ function FilterContent({
               />
               <span className="text-gray-700">Todas las edades</span>
             </label>
-            {ageRanges.map((range) => (
-              <label key={range} className="flex items-center">
-                <input
-                  type="radio"
-                  name="ageRange"
-                  checked={selectedAgeRange === range}
-                  onChange={() => onAgeRangeChange(range)}
-                  className="mr-3 text-jalm-orange"
-                />
-                <span className="text-gray-700">{range}</span>
-              </label>
-            ))}
+            {ageRangeList.length > 0 ? (
+              ageRangeList.map((range) => (
+                <label key={range} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="ageRange"
+                    checked={selectedAgeRange === range}
+                    onChange={() => onAgeRangeChange(range)}
+                    className="mr-3 text-jalm-orange"
+                  />
+                  <span className="text-gray-700">{range}</span>
+                </label>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 italic">No hay rangos de edad disponibles</p>
+            )}
           </div>
         )}
       </div>
@@ -271,18 +284,22 @@ function FilterContent({
               />
               <span className="text-gray-700">Cualquier espacio</span>
             </label>
-            {spaceTypes.map((space) => (
-              <label key={space} className="flex items-center">
-                <input
-                  type="radio"
-                  name="spaceType"
-                  checked={selectedSpaceType === space}
-                  onChange={() => onSpaceTypeChange(space)}
-                  className="mr-3 text-jalm-orange"
-                />
-                <span className="text-gray-700">{space}</span>
-              </label>
-            ))}
+            {spaceTypeList.length > 0 ? (
+              spaceTypeList.map((space) => (
+                <label key={space} className="flex items-center">
+                  <input
+                    type="radio"
+                    name="spaceType"
+                    checked={selectedSpaceType === space}
+                    onChange={() => onSpaceTypeChange(space)}
+                    className="mr-3 text-jalm-orange"
+                  />
+                  <span className="text-gray-700">{space}</span>
+                </label>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500 italic">No hay tipos de espacio disponibles</p>
+            )}
           </div>
         )}
       </div>
