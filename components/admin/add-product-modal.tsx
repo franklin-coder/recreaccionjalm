@@ -2,8 +2,10 @@
 'use client'
 
 import { useState } from 'react'
-import { X, Plus, Upload, Trash2, AlertCircle, CheckCircle } from 'lucide-react'
+import { X, Plus, Upload, Trash2, AlertCircle, CheckCircle, Image as ImageIcon } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { uploadMultipleImages } from '@/lib/upload-image'
+import Image from 'next/image'
 
 interface AddProductModalProps {
   isOpen: boolean
@@ -16,11 +18,14 @@ interface ImageData {
   url: string
   alt: string
   orden: number
+  file?: File
+  preview?: string
 }
 
 export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
   const [productType, setProductType] = useState<ProductType>('inflable')
   const [loading, setLoading] = useState(false)
+  const [uploadingImages, setUploadingImages] = useState(false)
   const [success, setSuccess] = useState(false)
   const [error, setError] = useState('')
 
@@ -47,26 +52,56 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
   const [incluyeFinalMusical, setIncluyeFinalMusical] = useState(false)
   const [destacado, setDestacado] = useState(false)
 
-  const handleAddImage = () => {
-    setImages([...images, { url: '', alt: '', orden: images.length }])
+  const handleFileSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    const newImages: ImageData[] = []
+    
+    // Create preview URLs for selected files
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const preview = URL.createObjectURL(file)
+      newImages.push({
+        url: '',
+        alt: file.name.split('.')[0],
+        orden: images.length + i,
+        file,
+        preview
+      })
+    }
+
+    setImages([...images, ...newImages])
   }
 
   const handleRemoveImage = (index: number) => {
+    const imageToRemove = images[index]
+    // Revoke the preview URL to free up memory
+    if (imageToRemove.preview) {
+      URL.revokeObjectURL(imageToRemove.preview)
+    }
     setImages(images.filter((_, i) => i !== index))
   }
 
-  const handleImageChange = (index: number, field: 'url' | 'alt', value: string) => {
+  const handleImageAltChange = (index: number, value: string) => {
     const newImages = [...images]
-    newImages[index][field] = value
+    newImages[index].alt = value
     setImages(newImages)
   }
 
   const resetForm = () => {
+    // Revoke all preview URLs
+    images.forEach(img => {
+      if (img.preview) {
+        URL.revokeObjectURL(img.preview)
+      }
+    })
+    
     setNombre('')
     setDescripcion('')
     setDescripcionCorta('')
     setEdades('')
-    setImages([{ url: '', alt: '', orden: 0 }])
+    setImages([])
     setDimensiones('')
     setCapacidad('')
     setEspacioRequerido('')
@@ -89,11 +124,42 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
     setLoading(true)
 
     try {
-      // Validar que al menos haya una imagen con URL
-      const validImages = images.filter(img => img.url.trim() !== '')
-      if (validImages.length === 0) {
+      // Validar que al menos haya una imagen
+      if (images.length === 0) {
         throw new Error('Debes agregar al menos una imagen')
       }
+
+      // Upload images to Supabase Storage
+      setUploadingImages(true)
+      const filesToUpload = images.filter(img => img.file).map(img => img.file!)
+      
+      let uploadedUrls: string[] = []
+      if (filesToUpload.length > 0) {
+        const folder = productType === 'inflable' ? 'inflables' : 'paquetes'
+        uploadedUrls = await uploadMultipleImages(filesToUpload, folder)
+      }
+      
+      setUploadingImages(false)
+
+      // Combine uploaded URLs with existing URLs (if any)
+      const finalImages = images.map((img, index) => {
+        if (img.file) {
+          // This is a newly uploaded file
+          const uploadedIndex = images.slice(0, index).filter(i => i.file).length
+          return {
+            url: uploadedUrls[uploadedIndex],
+            alt: img.alt || '',
+            orden: index
+          }
+        } else {
+          // This is an existing URL
+          return {
+            url: img.url,
+            alt: img.alt || '',
+            orden: index
+          }
+        }
+      })
 
       // Preparar datos según el tipo de producto
       const productData: any = {
@@ -102,7 +168,7 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
         descripcion,
         descripcion_corta: descripcionCorta,
         edades,
-        imagenes: validImages,
+        imagenes: finalImages,
       }
 
       if (productType === 'inflable') {
@@ -489,48 +555,84 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
             <div className="space-y-4 border-t pt-4">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold text-gray-900">Imágenes *</h3>
-                <button
-                  type="button"
-                  onClick={handleAddImage}
-                  className="flex items-center space-x-2 px-4 py-2 bg-jalm-teal text-white rounded-lg hover:bg-jalm-teal/90 transition-colors"
-                >
-                  <Plus className="h-4 w-4" />
-                  <span>Agregar Imagen</span>
-                </button>
+                <label className="flex items-center space-x-2 px-4 py-2 bg-jalm-teal text-white rounded-lg hover:bg-jalm-teal/90 transition-colors cursor-pointer">
+                  <Upload className="h-4 w-4" />
+                  <span>Subir Imágenes</span>
+                  <input
+                    type="file"
+                    multiple
+                    accept="image/*"
+                    onChange={handleFileSelect}
+                    className="hidden"
+                  />
+                </label>
               </div>
 
-              <div className="space-y-3">
-                {images.map((image, index) => (
-                  <div key={index} className="flex items-start space-x-3 p-4 bg-gray-50 rounded-lg">
-                    <div className="flex-1 space-y-2">
-                      <input
-                        type="url"
-                        value={image.url}
-                        onChange={(e) => handleImageChange(index, 'url', e.target.value)}
-                        placeholder="URL de la imagen"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent text-sm"
-                        required
-                      />
+              {images.length === 0 ? (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                  <ImageIcon className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 mb-2">No hay imágenes seleccionadas</p>
+                  <p className="text-sm text-gray-500">Haz clic en "Subir Imágenes" para agregar fotos del producto</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {images.map((image, index) => (
+                    <div key={index} className="relative group">
+                      <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-gray-200">
+                        {image.preview ? (
+                          <Image
+                            src={image.preview}
+                            alt={image.alt || `Imagen ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : image.url ? (
+                          <Image
+                            src={image.url}
+                            alt={image.alt || `Imagen ${index + 1}`}
+                            fill
+                            className="object-cover"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center">
+                            <ImageIcon className="h-12 w-12 text-gray-400" />
+                          </div>
+                        )}
+                      </div>
+                      
+                      {/* Image controls overlay */}
+                      <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="p-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </div>
+
+                      {/* Alt text input */}
                       <input
                         type="text"
                         value={image.alt}
-                        onChange={(e) => handleImageChange(index, 'alt', e.target.value)}
-                        placeholder="Texto alternativo (opcional)"
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent text-sm"
+                        onChange={(e) => handleImageAltChange(index, e.target.value)}
+                        placeholder="Descripción de la imagen"
+                        className="mt-2 w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent text-sm"
                       />
+                      
+                      {/* Order badge */}
+                      <div className="absolute top-2 left-2 bg-jalm-orange text-white text-xs font-bold px-2 py-1 rounded-full">
+                        #{index + 1}
+                      </div>
                     </div>
-                    {images.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => handleRemoveImage(index)}
-                        className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
-                    )}
-                  </div>
-                ))}
-              </div>
+                  ))}
+                </div>
+              )}
+
+              <p className="text-sm text-gray-500 flex items-center space-x-1">
+                <AlertCircle className="h-4 w-4" />
+                <span>Puedes subir hasta 10 imágenes. Se recomienda usar imágenes de alta calidad.</span>
+              </p>
             </div>
 
             {/* Botones */}
@@ -548,10 +650,10 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
               </button>
               <button
                 type="submit"
-                disabled={loading || success}
+                disabled={loading || success || uploadingImages}
                 className="flex-1 px-4 py-3 bg-gradient-to-r from-jalm-orange to-jalm-teal text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {loading ? 'Agregando...' : success ? '¡Agregado!' : 'Agregar Producto'}
+                {uploadingImages ? 'Subiendo imágenes...' : loading ? 'Agregando...' : success ? '¡Agregado!' : 'Agregar Producto'}
               </button>
             </div>
           </form>

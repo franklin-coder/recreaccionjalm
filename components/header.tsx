@@ -4,11 +4,19 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Phone, Search, Menu, X, ChevronDown } from 'lucide-react'
+import { Phone, Search, Menu, X, ChevronDown, Shield, User, Plus, LogOut } from 'lucide-react'
+import { useAuth } from '@/contexts/auth-context'
+import { LoginModal } from './admin/login-modal'
+import { AddProductModal } from './admin/add-product-modal'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
+  const { isAuthenticated, adminName, logout } = useAuth()
+  const [showLoginModal, setShowLoginModal] = useState(false)
+  const [showAddProductModal, setShowAddProductModal] = useState(false)
+  const [showAdminMenu, setShowAdminMenu] = useState(false)
 
   const navigation = [
     { name: 'Inicio', href: '/' },
@@ -44,8 +52,66 @@ export function Header() {
               <span>WhatsApp: 318 548 18 66</span>
             </div>
           </div>
-          <div className="text-gray-600">
-            <span className="font-semibold text-jalm-orange">30+ años</span> de experiencia
+          <div className="flex items-center space-x-4">
+            <div className="text-gray-600">
+              <span className="font-semibold text-jalm-orange">30+ años</span> de experiencia
+            </div>
+            
+            {/* Admin Controls */}
+            <div className="relative">
+              {!isAuthenticated ? (
+                <button
+                  onClick={() => setShowLoginModal(true)}
+                  className="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded-full shadow-md flex items-center space-x-2 transition-colors text-xs font-semibold"
+                >
+                  <Shield className="h-3.5 w-3.5" />
+                  <span>Admin</span>
+                </button>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setShowAdminMenu(!showAdminMenu)}
+                    className="bg-jalm-orange hover:bg-jalm-orange/90 text-white px-3 py-1.5 rounded-full shadow-md flex items-center space-x-2 transition-colors text-xs font-semibold"
+                  >
+                    <User className="h-3.5 w-3.5" />
+                    <span>Hola {adminName}</span>
+                  </button>
+
+                  <AnimatePresence>
+                    {showAdminMenu && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="absolute right-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 overflow-hidden z-50"
+                      >
+                        <button
+                          onClick={() => {
+                            setShowAddProductModal(true)
+                            setShowAdminMenu(false)
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                        >
+                          <Plus className="h-5 w-5 text-jalm-teal" />
+                          <span className="font-medium text-gray-700">Agregar Producto</span>
+                        </button>
+                        <div className="border-t border-gray-200" />
+                        <button
+                          onClick={() => {
+                            logout()
+                            setShowAdminMenu(false)
+                          }}
+                          className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+                        >
+                          <LogOut className="h-5 w-5 text-red-500" />
+                          <span className="font-medium text-gray-700">Cerrar Sesión</span>
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </>
+              )}
+            </div>
           </div>
         </div>
 
@@ -175,6 +241,16 @@ export function Header() {
           </div>
         )}
       </div>
+
+      {/* Admin Modals */}
+      <LoginModal 
+        isOpen={showLoginModal} 
+        onClose={() => setShowLoginModal(false)} 
+      />
+      <AddProductModal 
+        isOpen={showAddProductModal} 
+        onClose={() => setShowAddProductModal(false)} 
+      />
     </header>
   )
 }
