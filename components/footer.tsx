@@ -43,7 +43,7 @@ export function Footer() {
 
           {/* Services */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-jalm-orange">Nuestros Servicios</h4>
+            <h4 className="text-white text-lg font-semibold text-jalm-orange">Nuestros Servicios</h4>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/servicios/inflables-infantiles" className="text-gray-300 hover:text-white transition-colors">
