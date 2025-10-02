@@ -1,3 +1,4 @@
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -44,13 +45,11 @@ export interface Inflable {
   nombre: string
   slug: string
   descripcion: string
-  descripcion_corta?: string
   dimensiones?: string
   capacidad?: number
   edades: string
-  espacio_requerido?: string
-  tiempo_instalacion?: string
   tipo: 'seco' | 'mojado' | 'ambos'
+  categoria?: 'infantil' | 'acuatico'
   activo: boolean
   imagenes?: ImagenInflable[]
   created_at?: string
