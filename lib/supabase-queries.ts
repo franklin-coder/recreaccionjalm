@@ -85,6 +85,7 @@ export async function getPaqueteBySlug(slug: string): Promise<Paquete | null> {
  */
 export async function getInflables(options?: {
   tipo?: 'seco' | 'mojado' | 'ambos'
+  categoria?: 'infantil' | 'acuatico'
   busqueda?: string
 }): Promise<Inflable[]> {
   try {
@@ -96,6 +97,11 @@ export async function getInflables(options?: {
       `)
       .eq('activo', true)
       .order('created_at', { ascending: false })
+
+    // Filtrar por categoria si se especifica
+    if (options?.categoria) {
+      query = query.eq('categoria', options.categoria)
+    }
 
     // Filtrar por tipo si se especifica
     // 'ambos' significa que queremos tanto secos como mojados (no filtrar por tipo)
