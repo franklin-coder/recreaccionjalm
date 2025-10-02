@@ -5,6 +5,7 @@ import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Clock, Users, Star, ArrowRight, Music, Zap } from 'lucide-react'
+import { AdminProductControls } from '@/components/admin/admin-product-controls'
 
 interface PackageCardProps {
   package: {
@@ -29,7 +30,6 @@ export function PackageCard({ package: pkg, index }: PackageCardProps) {
   const imageAlt = pkg.images[0]?.alt || pkg.name
 
   return (
-
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
@@ -45,6 +45,12 @@ export function PackageCard({ package: pkg, index }: PackageCardProps) {
           </div>
         </div>
       )}
+
+      <AdminProductControls
+        productId={pkg.id}
+        productName={pkg.name}
+        productType="paquete"
+      />
       
       <Link href={`/paquetes/${pkg.slug}`} className="group block">
         <div className="card-jalm h-full overflow-hidden">
