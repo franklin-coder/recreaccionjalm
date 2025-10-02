@@ -4,6 +4,8 @@ import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { AuthProvider } from '@/contexts/auth-context'
+import { AdminControls } from '@/components/admin/admin-controls'
 
 const montserrat = Montserrat({ 
   subsets: ['latin'],
@@ -35,11 +37,14 @@ export default function RootLayout({
   return (
     <html lang="es" className={montserrat.variable}>
       <body className="min-h-screen flex flex-col">
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <Header />
+          <AdminControls />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   )

@@ -5,6 +5,7 @@ import { motion, HTMLMotionProps } from 'framer-motion'
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Users, Calendar, MapPin } from 'lucide-react'
+import { AdminProductControls } from '@/components/admin/admin-product-controls'
 
 interface ServiceCardProps {
   service: {
@@ -26,13 +27,19 @@ export function ServiceCard({ service, index }: ServiceCardProps) {
   const imageAlt = service.images[0]?.alt || service.name
 
   return (
-
     <motion.div
       initial={{ opacity: 0, y: 50 }}
       whileInView={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, delay: index * 0.1 }}
       viewport={{ once: true }}
+      className="relative"
     >
+      <AdminProductControls
+        productId={service.id}
+        productName={service.name}
+        productType="inflable"
+      />
+      
       <Link href={`/servicios/${service.category.name.toLowerCase().replace(/ /g, '-')}/${service.slug}`} className="group block">
         <div className="card-jalm h-full overflow-hidden">
           {/* Image */}
