@@ -1,131 +1,123 @@
-
-import { NextRequest, NextResponse } from 'next/server'
-import { supabase } from '@/lib/supabase'
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@/lib/supabase';
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
-    const { productType, imagenes, ...productData } = body
-
-    // Validar tipo de producto
-    if (!['inflable', 'paquete'].includes(productType)) {
-      return NextResponse.json(
-        { error: 'Tipo de producto inválido' },
-        { status: 400 }
-      )
-    }
-
-    // Validar campos requeridos
-    if (!productData.nombre || !productData.descripcion || !productData.edades) {
-      return NextResponse.json(
-        { error: 'Faltan campos requeridos' },
-        { status: 400 }
-      )
-    }
-
-    // Validar imágenes
-    if (!imagenes || imagenes.length === 0) {
-      return NextResponse.json(
-        { error: 'Debe incluir al menos una imagen' },
-        { status: 400 }
-      )
-    }
-
-    // Generar slug a partir del nombre
-    const slug = productData.nombre
-      .toLowerCase()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/^-+|-+$/g, '')
-
-    // Preparar datos del producto
-    const productToInsert = {
-      ...productData,
-      slug,
-      activo: true,
-    }
-
-    let insertedProduct
-    let imageTableName
-
+    const supabase = createClient();
+    const formData = await request.formData();
+    
+    const productType = formData.get('productType') as string;
+    
     if (productType === 'inflable') {
       // Insertar inflable
-      const { data, error } = await supabase
+      const inflableData = {
+        nombre: formData.get('nombre'),
+        descripcion: formData.get('descripcion'),
+        precio: parseFloat(formData.get('precio') as string),
+        categoria: formData.get('categoria'), // infantil o acuatico
+        tipo: formData.get('tipo'),
+        capacidad: parseInt(formData.get('capacidad') as string),
+        slug: (formData.get('nombre') as string)
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]/g, ''),
+      };
+
+      const { data: inflable, error: inflableError } = await supabase
         .from('inflables')
-        .insert([productToInsert])
+        .insert([inflableData])
         .select()
-        .single()
+        .single();
 
-      if (error) {
-        console.error('Error al insertar inflable:', error)
+      if (inflableError) {
+        console.error('Error al insertar inflable:', inflableError);
         return NextResponse.json(
-          { error: 'Error al crear el inflable', details: error.message },
+          { error: 'Error al crear el inflable', details: inflableError },
           { status: 500 }
-        )
+        );
       }
 
-      insertedProduct = data
-      imageTableName = 'imagenes_inflables'
-    } else {
+      // Procesar imágenes
+      const imageUrls = formData.getAll('imageUrls') as string[];
+      
+      if (imageUrls.length > 0) {
+        const imageRecords = imageUrls.map((url, index) => ({
+          inflable_id: inflable.id,
+          url: url,
+          orden: index,
+        }));
+
+        const { error: imageError } = await supabase
+          .from('imagenes_inflables')
+          .insert(imageRecords);
+
+        if (imageError) {
+          console.error('Error al insertar imágenes:', imageError);
+        }
+      }
+
+      return NextResponse.json({ success: true, data: inflable });
+      
+    } else if (productType === 'paquete') {
       // Insertar paquete
-      const { data, error } = await supabase
-        .from('paquetes')
-        .insert([productToInsert])
-        .select()
-        .single()
+      const paqueteData = {
+        nombre: formData.get('nombre'),
+        descripcion: formData.get('descripcion'),
+        descripcion_corta: formData.get('descripcion_corta'),
+        precio: parseFloat(formData.get('precio') as string),
+        duracion_horas: parseInt(formData.get('duracion_horas') as string),
+        slug: (formData.get('nombre') as string)
+          .toLowerCase()
+          .replace(/\s+/g, '-')
+          .replace(/[^\w-]/g, ''),
+      };
 
-      if (error) {
-        console.error('Error al insertar paquete:', error)
+      const { data: paquete, error: paqueteError } = await supabase
+        .from('paquetes')
+        .insert([paqueteData])
+        .select()
+        .single();
+
+      if (paqueteError) {
+        console.error('Error al insertar paquete:', paqueteError);
         return NextResponse.json(
-          { error: 'Error al crear el paquete', details: error.message },
+          { error: 'Error al crear el paquete', details: paqueteError },
           { status: 500 }
-        )
+        );
       }
 
-      insertedProduct = data
-      imageTableName = 'imagenes_paquetes'
-    }
+      // Procesar imágenes
+      const imageUrls = formData.getAll('imageUrls') as string[];
+      
+      if (imageUrls.length > 0) {
+        const imageRecords = imageUrls.map((url, index) => ({
+          paquete_id: paquete.id,
+          url: url,
+          orden: index,
+        }));
 
-    // Insertar imágenes
-    const imagenesToInsert = imagenes.map((img: any, index: number) => ({
-      [`${productType}_id`]: insertedProduct.id,
-      url: img.url,
-      alt: img.alt || productData.nombre,
-      orden: index,
-    }))
+        const { error: imageError } = await supabase
+          .from('imagenes_paquetes')
+          .insert(imageRecords);
 
-    const { error: imageError } = await supabase
-      .from(imageTableName)
-      .insert(imagenesToInsert)
+        if (imageError) {
+          console.error('Error al insertar imágenes:', imageError);
+        }
+      }
 
-    if (imageError) {
-      console.error('Error al insertar imágenes:', imageError)
-      // Intentar eliminar el producto si falló la inserción de imágenes
-      await supabase
-        .from(productType === 'inflable' ? 'inflables' : 'paquetes')
-        .delete()
-        .eq('id', insertedProduct.id)
-
-      return NextResponse.json(
-        { error: 'Error al agregar las imágenes', details: imageError.message },
-        { status: 500 }
-      )
+      return NextResponse.json({ success: true, data: paquete });
     }
 
     return NextResponse.json(
-      {
-        success: true,
-        product: insertedProduct,
-        message: `${productType === 'inflable' ? 'Inflable' : 'Paquete'} agregado exitosamente`,
-      },
-      { status: 201 }
-    )
-  } catch (error: any) {
-    console.error('Error en POST /api/products/add:', error)
+      { error: 'Tipo de producto no válido' },
+      { status: 400 }
+    );
+    
+  } catch (error) {
+    console.error('Error en el endpoint:', error);
     return NextResponse.json(
-      { error: 'Error interno del servidor', details: error.message },
+      { error: 'Error interno del servidor' },
       { status: 500 }
-    )
+    );
   }
 }
