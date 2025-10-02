@@ -75,10 +75,10 @@ export function Footer() {
 
           {/* Contact Info */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-jalm-teal">Contacto</h4>
+            <h4 className="text-lg font-semibold text-white">Contacto</h4>
             <div className="space-y-3 text-sm">
               <div className="flex items-center space-x-3">
-                <Phone className="h-4 w-4 text-jalm-orange flex-shrink-0" />
+                <Phone className="h-4 w-4 text-jalm-teal flex-shrink-0" />
                 <span className="text-gray-300">PBX: 60 4 444 86 93</span>
               </div>
               <div className="flex items-center space-x-3">
@@ -89,7 +89,7 @@ export function Footer() {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Mail className="h-4 w-4 text-jalm-orange flex-shrink-0" />
+                <Mail className="h-4 w-4 text-jalm-teal flex-shrink-0" />
                 <span className="text-gray-300">jalmcomercial@gmail.com</span>
               </div>
               <div className="flex items-start space-x-3">
@@ -105,7 +105,7 @@ export function Footer() {
 
           {/* Business Hours */}
           <div className="space-y-4">
-            <h4 className="text-lg font-semibold text-jalm-orange">Horarios de Atención</h4>
+            <h4 className="text-white text-lg font-semibold text-jalm-orange">Horarios de Atención</h4>
             <div className="space-y-2 text-sm text-gray-300">
               <div className="flex items-center space-x-3">
                 <Clock className="h-4 w-4 text-jalm-teal flex-shrink-0" />
@@ -115,14 +115,14 @@ export function Footer() {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Clock className="h-4 w-4 text-jalm-orange flex-shrink-0" />
+                <Clock className="h-4 w-4 text-jalm-teal flex-shrink-0" />
                 <div>
                   <p className="font-medium">Sábados</p>
                   <p>8:00 AM - 4:00 PM</p>
                 </div>
               </div>
               <div className="mt-3 p-3 bg-gray-800 rounded-lg">
-                <p className="text-jalm-orange font-medium text-xs">¡Eventos los 7 días de la semana!</p>
+                <p className="text-white text-jalm-orange font-medium text-xs">¡Eventos los 7 días de la semana!</p>
               </div>
             </div>
           </div>

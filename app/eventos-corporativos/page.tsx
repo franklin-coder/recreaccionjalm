@@ -271,17 +271,17 @@ export default function EventosCorporativosPage() {
             viewport={{ once: true }}
             className="max-w-3xl mx-auto space-y-8"
           >
-            <h2 className="text-4xl lg:text-5xl font-bold mb-6">
+            <h2 className="text-jalm-orange  text-4xl lg:text-5xl font-bold mb-6">
               ¿Listo para transformar tu equipo?
             </h2>
-            <p className="text-xl leading-relaxed opacity-90">
+            <p className="text-jalm-orange text-xl leading-relaxed opacity-90">
               Contáctanos para diseñar un evento corporativo personalizado 
               que se adapte a los objetivos y valores de tu empresa.
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/contacto" className="group">
-                <button className="bg-white text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center">
+                <button className="bg-success text-gray-900 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 transition-all duration-300 transform hover:scale-105 hover:shadow-xl flex items-center justify-center border border-grey/1">
                   Solicitar Cotización
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </button>
