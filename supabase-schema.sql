@@ -258,3 +258,47 @@ COMMENT ON TABLE imagenes_inflables IS 'Imágenes asociadas a cada inflable';
 COMMENT ON COLUMN paquetes.espacio IS 'Tipo de espacio requerido: cerrado, abierto o mixto';
 COMMENT ON COLUMN paquetes.destacado IS 'Indica si el paquete debe mostrarse como destacado en la página principal';
 COMMENT ON COLUMN inflables.tipo IS 'Tipo de inflable: seco (sin agua), mojado (con agua) o ambos';
+
+
+
+-- ============================================
+-- TABLA DE SOLICITUDES DE CONTACTO
+-- ============================================
+
+-- Tabla: contact_requests
+-- Descripción: Almacena las solicitudes de contacto de los clientes
+CREATE TABLE IF NOT EXISTS contact_requests (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(255) NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  phone VARCHAR(50),
+  subject VARCHAR(500) NOT NULL,
+  message TEXT NOT NULL,
+  event_type VARCHAR(100),
+  status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'contacted', 'resolved')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Índices para contact_requests
+CREATE INDEX idx_contact_requests_status ON contact_requests(status);
+CREATE INDEX idx_contact_requests_created_at ON contact_requests(created_at DESC);
+CREATE INDEX idx_contact_requests_email ON contact_requests(email);
+
+-- Trigger para actualizar updated_at en contact_requests
+CREATE TRIGGER update_contact_requests_updated_at
+  BEFORE UPDATE ON contact_requests
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+-- Habilitar RLS en contact_requests
+ALTER TABLE contact_requests ENABLE ROW LEVEL SECURITY;
+
+-- Política de lectura pública para contact_requests (solo para administradores)
+-- Nota: Esta política debe ser ajustada según tus necesidades de seguridad
+CREATE POLICY "Permitir inserción pública de solicitudes de contacto"
+  ON contact_requests FOR INSERT
+  WITH CHECK (true);
+
+COMMENT ON TABLE contact_requests IS 'Almacena las solicitudes de contacto de los clientes';
+COMMENT ON COLUMN contact_requests.status IS 'Estado de la solicitud: pending (pendiente), contacted (contactado), resolved (resuelto)';
