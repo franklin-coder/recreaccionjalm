@@ -115,6 +115,9 @@ export function Header() {
                 className="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
               />
             </div>
+            <Link href="/admin/dashboard" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-jalm-orange transition-colors">
+              Admin
+            </Link>
             <Link href="/contacto" className="btn-jalm-primary">
               Cotizar Ahora
             </Link>
@@ -163,7 +166,14 @@ export function Header() {
                 </div>
               ))}
             </nav>
-            <div className="mt-4 px-3">
+            <div className="mt-4 px-3 space-y-2">
+              <Link
+                href="/admin/dashboard"
+                className="block w-full text-center px-4 py-2 text-sm font-medium text-gray-700 hover:text-jalm-orange border border-gray-300 rounded-lg transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Admin
+              </Link>
               <Link
                 href="/contacto"
                 className="btn-jalm-primary w-full text-center"
