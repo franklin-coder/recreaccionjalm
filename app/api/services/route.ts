@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { getInflables } from '@/lib/supabase-queries'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,63 +12,64 @@ export async function GET(request: NextRequest) {
     const space = searchParams.get('space')
     const search = searchParams.get('search')
 
-    const where: any = {
-      isActive: true,
+    // Determine tipo based on category slug
+    let tipo: 'seco' | 'mojado' | 'ambos' | undefined = undefined
+    if (category === 'inflables-secos') {
+      tipo = 'seco'
+    } else if (category === 'inflables-mojados') {
+      tipo = 'mojado'
+    } else if (category === 'inflables-infantiles') {
+      // Infantiles can be both types
+      tipo = 'ambos'
     }
 
-    if (category) {
-      where.category = {
-        slug: category
+    // Get inflables from Supabase
+    const inflables = await getInflables({
+      tipo,
+      busqueda: search || undefined
+    })
+
+    // Transform to match the expected Service interface
+    let services = inflables.map(inflable => ({
+      id: inflable.id,
+      name: inflable.nombre,
+      slug: inflable.slug,
+      description: inflable.descripcion,
+      shortDesc: inflable.descripcion_corta,
+      images: inflable.imagenes?.map(img => ({
+        url: img.url,
+        alt: img.alt || inflable.nombre
+      })) || [],
+      ageRange: inflable.edades,
+      space: inflable.espacio_requerido,
+      category: {
+        name: inflable.tipo === 'seco' ? 'Inflables Secos' : 
+              inflable.tipo === 'mojado' ? 'Inflables Mojados' : 
+              'Inflables Infantiles',
+        slug: inflable.tipo === 'seco' ? 'inflables-secos' : 
+              inflable.tipo === 'mojado' ? 'inflables-mojados' : 
+              'inflables-infantiles'
       }
-    }
+    }))
 
+    // Apply additional filters
     if (ageRange) {
-      where.ageRange = {
-        contains: ageRange,
-        mode: 'insensitive'
-      }
+      services = services.filter(s => 
+        s.ageRange?.toLowerCase().includes(ageRange.toLowerCase())
+      )
     }
 
     if (space) {
-      where.space = {
-        contains: space,
-        mode: 'insensitive'
-      }
+      services = services.filter(s => 
+        s.space?.toLowerCase().includes(space.toLowerCase())
+      )
     }
-
-    if (search) {
-      where.OR = [
-        {
-          name: {
-            contains: search,
-            mode: 'insensitive'
-          }
-        },
-        {
-          description: {
-            contains: search,
-            mode: 'insensitive'
-          }
-        }
-      ]
-    }
-
-    const services = await prisma.service.findMany({
-      where,
-      include: {
-        category: true,
-        images: {
-          orderBy: { order: 'asc' }
-        }
-      },
-      orderBy: { createdAt: 'desc' }
-    })
 
     return NextResponse.json(services)
   } catch (error) {
     console.error('Error fetching services:', error)
     return NextResponse.json(
-      { error: 'Error fetching services' },
+      { error: 'Error fetching services', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     )
   }

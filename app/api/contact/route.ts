@@ -1,6 +1,6 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,18 +17,28 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Create contact request
-    const contactRequest = await prisma.contactRequest.create({
-      data: {
+    // Create contact request in Supabase
+    const { data: contactRequest, error } = await supabase
+      .from('contact_requests')
+      .insert({
         name,
         email,
         subject: subject || 'Consulta general',
         message,
         phone,
-        eventType,
+        event_type: eventType,
         status: 'pending'
-      }
-    })
+      })
+      .select()
+      .single()
+
+    if (error) {
+      console.error('Supabase error:', error)
+      return NextResponse.json(
+        { error: 'Error al enviar la solicitud' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json({
       success: true,
@@ -46,10 +56,19 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
   try {
-    const requests = await prisma.contactRequest.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 50
-    })
+    const { data: requests, error } = await supabase
+      .from('contact_requests')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(50)
+
+    if (error) {
+      console.error('Supabase error:', error)
+      return NextResponse.json(
+        { error: 'Error fetching contact requests' },
+        { status: 500 }
+      )
+    }
 
     return NextResponse.json(requests)
   } catch (error) {

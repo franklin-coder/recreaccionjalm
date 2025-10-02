@@ -1,19 +1,34 @@
 
 import { NextRequest, NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { supabase } from '@/lib/supabase'
 
 export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
-    const categories = await prisma.category.findMany({
-      orderBy: { order: 'asc' },
-      include: {
-        _count: {
-          select: { services: true }
-        }
+    // Fetch categories from Supabase
+    // Note: Since we migrated to Supabase with inflables/paquetes structure,
+    // we'll create categories based on the inflables types
+    const categories = [
+      {
+        id: '1',
+        name: 'Inflables Secos',
+        slug: 'inflables-secos',
+        order: 1
+      },
+      {
+        id: '2',
+        name: 'Inflables Mojados',
+        slug: 'inflables-mojados',
+        order: 2
+      },
+      {
+        id: '3',
+        name: 'Inflables Infantiles',
+        slug: 'inflables-infantiles',
+        order: 3
       }
-    })
+    ]
 
     return NextResponse.json(categories)
   } catch (error) {

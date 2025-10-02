@@ -44,9 +44,12 @@ export interface Inflable {
   nombre: string
   slug: string
   descripcion: string
+  descripcion_corta?: string
   dimensiones?: string
   capacidad?: number
   edades: string
+  espacio_requerido?: string
+  tiempo_instalacion?: string
   tipo: 'seco' | 'mojado' | 'ambos'
   activo: boolean
   imagenes?: ImagenInflable[]
@@ -61,4 +64,17 @@ export interface ImagenInflable {
   alt?: string
   orden: number
   created_at?: string
+}
+
+export interface ContactRequest {
+  id: string
+  name: string
+  email: string
+  phone?: string
+  subject: string
+  message: string
+  event_type?: string
+  status: 'pending' | 'contacted' | 'resolved'
+  created_at?: string
+  updated_at?: string
 }

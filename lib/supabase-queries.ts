@@ -98,7 +98,8 @@ export async function getInflables(options?: {
       .order('created_at', { ascending: false })
 
     // Filtrar por tipo si se especifica
-    if (options?.tipo) {
+    // 'ambos' significa que queremos tanto secos como mojados (no filtrar por tipo)
+    if (options?.tipo && options.tipo !== 'ambos') {
       query = query.eq('tipo', options.tipo)
     }
 
