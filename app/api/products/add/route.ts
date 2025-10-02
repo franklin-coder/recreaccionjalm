@@ -1,4 +1,5 @@
 
+
 import { NextRequest, NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
 
@@ -31,6 +32,14 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    // Validar categoria para inflables
+    if (productType === 'inflable' && !productData.categoria) {
+      return NextResponse.json(
+        { error: 'Debe seleccionar una categoría para el inflable' },
+        { status: 400 }
+      )
+    }
+
     // Generar slug a partir del nombre
     const slug = productData.nombre
       .toLowerCase()
@@ -39,10 +48,12 @@ export async function POST(request: NextRequest) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/^-+|-+$/g, '')
 
-    // Preparar datos del producto
-    const productToInsert = {
-      ...productData,
+    // Preparar datos del producto según el tipo
+    let productToInsert: any = {
+      nombre: productData.nombre,
       slug,
+      descripcion: productData.descripcion,
+      edades: productData.edades,
       activo: true,
     }
 
@@ -50,6 +61,15 @@ export async function POST(request: NextRequest) {
     let imageTableName
 
     if (productType === 'inflable') {
+      // Campos específicos de inflables (solo los que existen en la BD)
+      productToInsert = {
+        ...productToInsert,
+        dimensiones: productData.dimensiones || null,
+        capacidad: productData.capacidad ? parseInt(productData.capacidad) : null,
+        tipo: productData.tipo || 'seco',
+        categoria: productData.categoria, // NUEVO: campo categoria
+      }
+
       // Insertar inflable
       const { data, error } = await supabase
         .from('inflables')
@@ -68,6 +88,19 @@ export async function POST(request: NextRequest) {
       insertedProduct = data
       imageTableName = 'imagenes_inflables'
     } else {
+      // Campos específicos de paquetes
+      productToInsert = {
+        ...productToInsert,
+        descripcion_corta: productData.descripcion_corta || null,
+        precio: productData.precio ? parseFloat(productData.precio) : null,
+        duracion: productData.duracion,
+        cantidad_bases: productData.cantidad_bases ? parseInt(productData.cantidad_bases) : null,
+        espacio: productData.espacio || 'mixto',
+        incluye_mega_inflable: productData.incluye_mega_inflable || false,
+        incluye_final_musical: productData.incluye_final_musical || false,
+        destacado: productData.destacado || false,
+      }
+
       // Insertar paquete
       const { data, error } = await supabase
         .from('paquetes')
