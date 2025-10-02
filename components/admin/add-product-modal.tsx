@@ -1,4 +1,5 @@
 
+
 'use client'
 
 import { useState } from 'react'
@@ -34,9 +35,8 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
   // Campos específicos de inflables
   const [dimensiones, setDimensiones] = useState('')
   const [capacidad, setCapacidad] = useState('')
-  const [espacioRequerido, setEspacioRequerido] = useState('')
-  const [tiempoInstalacion, setTiempoInstalacion] = useState('')
   const [tipo, setTipo] = useState<'seco' | 'mojado' | 'ambos'>('seco')
+  const [categoria, setCategoria] = useState<'infantil' | 'acuatico'>('infantil')
 
   // Campos específicos de paquetes
   const [precio, setPrecio] = useState('')
@@ -69,9 +69,8 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
     setImages([{ url: '', alt: '', orden: 0 }])
     setDimensiones('')
     setCapacidad('')
-    setEspacioRequerido('')
-    setTiempoInstalacion('')
     setTipo('seco')
+    setCategoria('infantil')
     setPrecio('')
     setDuracion('')
     setCantidadBases('')
@@ -100,7 +99,6 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
         productType,
         nombre,
         descripcion,
-        descripcion_corta: descripcionCorta,
         edades,
         imagenes: validImages,
       }
@@ -108,10 +106,10 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
       if (productType === 'inflable') {
         productData.dimensiones = dimensiones
         productData.capacidad = capacidad ? parseInt(capacidad) : null
-        productData.espacio_requerido = espacioRequerido
-        productData.tiempo_instalacion = tiempoInstalacion
         productData.tipo = tipo
+        productData.categoria = categoria // NUEVO: incluir categoria
       } else {
+        productData.descripcion_corta = descripcionCorta
         productData.precio = precio ? parseFloat(precio) : null
         productData.duracion = duracion
         productData.cantidad_bases = cantidadBases ? parseInt(cantidadBases) : null
@@ -273,19 +271,22 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
                 />
               </div>
 
-              <div className="md:col-span-2">
-                <label htmlFor="descripcionCorta" className="block text-sm font-medium text-gray-700 mb-2">
-                  Descripción Corta
-                </label>
-                <input
-                  id="descripcionCorta"
-                  type="text"
-                  value={descripcionCorta}
-                  onChange={(e) => setDescripcionCorta(e.target.value)}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
-                  placeholder="Ej: Diversión garantizada para todas las edades"
-                />
-              </div>
+              {/* Descripción Corta solo para paquetes */}
+              {productType === 'paquete' && (
+                <div className="md:col-span-2">
+                  <label htmlFor="descripcionCorta" className="block text-sm font-medium text-gray-700 mb-2">
+                    Descripción Corta
+                  </label>
+                  <input
+                    id="descripcionCorta"
+                    type="text"
+                    value={descripcionCorta}
+                    onChange={(e) => setDescripcionCorta(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
+                    placeholder="Ej: Diversión garantizada para todas las edades"
+                  />
+                </div>
+              )}
 
               <div>
                 <label htmlFor="edades" className="block text-sm font-medium text-gray-700 mb-2">
@@ -308,6 +309,44 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
               <div className="space-y-4 border-t pt-4">
                 <h3 className="text-lg font-semibold text-gray-900">Detalles del Inflable</h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="categoria" className="block text-sm font-medium text-gray-700 mb-2">
+                      Categoría * <span className="text-xs text-gray-500">(Define dónde se mostrará)</span>
+                    </label>
+                    <select
+                      id="categoria"
+                      value={categoria}
+                      onChange={(e) => setCategoria(e.target.value as 'infantil' | 'acuatico')}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
+                      required
+                    >
+                      <option value="infantil">Infantil (para niños)</option>
+                      <option value="acuatico">Acuático (con agua)</option>
+                    </select>
+                    <p className="mt-1 text-xs text-gray-500">
+                      {categoria === 'infantil' 
+                        ? 'Se mostrará en la sección de Inflables Infantiles' 
+                        : 'Se mostrará en la sección de Inflables Acuáticos'}
+                    </p>
+                  </div>
+
+                  <div>
+                    <label htmlFor="tipo" className="block text-sm font-medium text-gray-700 mb-2">
+                      Tipo *
+                    </label>
+                    <select
+                      id="tipo"
+                      value={tipo}
+                      onChange={(e) => setTipo(e.target.value as 'seco' | 'mojado' | 'ambos')}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
+                      required
+                    >
+                      <option value="seco">Seco</option>
+                      <option value="mojado">Mojado</option>
+                      <option value="ambos">Ambos</option>
+                    </select>
+                  </div>
+
                   <div>
                     <label htmlFor="dimensiones" className="block text-sm font-medium text-gray-700 mb-2">
                       Dimensiones
@@ -334,51 +373,6 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
                       placeholder="Ej: 10"
                     />
-                  </div>
-
-                  <div>
-                    <label htmlFor="espacioRequerido" className="block text-sm font-medium text-gray-700 mb-2">
-                      Espacio Requerido
-                    </label>
-                    <input
-                      id="espacioRequerido"
-                      type="text"
-                      value={espacioRequerido}
-                      onChange={(e) => setEspacioRequerido(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
-                      placeholder="Ej: 6m x 5m"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="tiempoInstalacion" className="block text-sm font-medium text-gray-700 mb-2">
-                      Tiempo de Instalación
-                    </label>
-                    <input
-                      id="tiempoInstalacion"
-                      type="text"
-                      value={tiempoInstalacion}
-                      onChange={(e) => setTiempoInstalacion(e.target.value)}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
-                      placeholder="Ej: 30 minutos"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="tipo" className="block text-sm font-medium text-gray-700 mb-2">
-                      Tipo *
-                    </label>
-                    <select
-                      id="tipo"
-                      value={tipo}
-                      onChange={(e) => setTipo(e.target.value as 'seco' | 'mojado' | 'ambos')}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-jalm-orange focus:border-transparent"
-                      required
-                    >
-                      <option value="seco">Seco</option>
-                      <option value="mojado">Mojado</option>
-                      <option value="ambos">Ambos</option>
-                    </select>
                   </div>
                 </div>
               </div>

@@ -12,19 +12,23 @@ export async function GET(request: NextRequest) {
     const space = searchParams.get('space')
     const search = searchParams.get('search')
 
-    // Determine tipo based on category slug
+    // Determine categoria and tipo based on category slug
+    let categoriaFilter: 'infantil' | 'acuatico' | undefined = undefined
     let tipo: 'seco' | 'mojado' | 'ambos' | undefined = undefined
-    if (category === 'inflables-secos') {
+    
+    if (category === 'infantiles') {
+      categoriaFilter = 'infantil'
+    } else if (category === 'acuaticos') {
+      categoriaFilter = 'acuatico'
+    } else if (category === 'inflables-secos') {
       tipo = 'seco'
     } else if (category === 'inflables-mojados') {
       tipo = 'mojado'
-    } else if (category === 'inflables-infantiles') {
-      // Infantiles can be both types
-      tipo = 'ambos'
     }
 
     // Get inflables from Supabase
     const inflables = await getInflables({
+      categoria: categoriaFilter,
       tipo,
       busqueda: search || undefined
     })
@@ -35,20 +39,16 @@ export async function GET(request: NextRequest) {
       name: inflable.nombre,
       slug: inflable.slug,
       description: inflable.descripcion,
-      shortDesc: inflable.descripcion_corta,
+      shortDesc: undefined, // inflables don't have descripcion_corta
       images: inflable.imagenes?.map(img => ({
         url: img.url,
         alt: img.alt || inflable.nombre
       })) || [],
       ageRange: inflable.edades,
-      space: inflable.espacio_requerido,
+      space: undefined, // removed espacio_requerido field
       category: {
-        name: inflable.tipo === 'seco' ? 'Inflables Secos' : 
-              inflable.tipo === 'mojado' ? 'Inflables Mojados' : 
-              'Inflables Infantiles',
-        slug: inflable.tipo === 'seco' ? 'inflables-secos' : 
-              inflable.tipo === 'mojado' ? 'inflables-mojados' : 
-              'inflables-infantiles'
+        name: inflable.categoria === 'infantil' ? 'Inflables Infantiles' : 'Inflables Acuáticos',
+        slug: inflable.categoria === 'infantil' ? 'infantiles' : 'acuaticos'
       }
     }))
 
