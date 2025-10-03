@@ -1,4 +1,5 @@
 
+
 import { createClient } from '@supabase/supabase-js'
 
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
@@ -80,9 +81,11 @@ export interface ContactRequest {
 
 export interface NewsletterSubscriber {
   id: string
+  nombre: string
   email: string
   subscribed_at: string
   source: string
   created_at?: string
   updated_at?: string
 }
+

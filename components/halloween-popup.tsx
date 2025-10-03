@@ -1,4 +1,5 @@
 
+
 'use client'
 
 import { useState, useEffect } from 'react'
@@ -8,6 +9,7 @@ import { supabase } from '@/lib/supabase'
 
 export function HalloweenPopup() {
   const [isOpen, setIsOpen] = useState(false)
+  const [nombre, setNombre] = useState('')
   const [email, setEmail] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
@@ -41,6 +43,11 @@ export function HalloweenPopup() {
     e.preventDefault()
     setError('')
 
+    if (!nombre.trim()) {
+      setError('Por favor ingresa tu nombre')
+      return
+    }
+
     if (!validateEmail(email)) {
       setError('Por favor ingresa un correo válido')
       return
@@ -53,6 +60,7 @@ export function HalloweenPopup() {
         .from('newsletter_subscribers')
         .insert([
           {
+            nombre: nombre.trim(),
             email: email.toLowerCase().trim(),
             source: 'halloween_popup'
           }
@@ -69,6 +77,7 @@ export function HalloweenPopup() {
       }
 
       setShowSuccess(true)
+      setNombre('')
       setEmail('')
       
       // Close popup after 3 seconds
@@ -203,7 +212,7 @@ export function HalloweenPopup() {
                       >
                         <div className="text-4xl mb-2">✨🎉✨</div>
                         <p className="text-white font-semibold">
-                          ¡Suscripción exitosa!
+                          ¡Gracias {nombre}!
                         </p>
                         <p className="text-green-200 text-sm mt-1">
                           Prepárate para ofertas espeluznantes
@@ -215,6 +224,25 @@ export function HalloweenPopup() {
                   {/* Form */}
                   {!showSuccess && (
                     <form onSubmit={handleSubmit} className="space-y-4">
+                      <div className="relative">
+                        <input
+                          type="text"
+                          value={nombre}
+                          onChange={(e) => setNombre(e.target.value)}
+                          placeholder="Tu nombre"
+                          className="w-full px-4 py-3 bg-white/10 border-2 border-[#FF6B35]/50 rounded-xl text-white placeholder-purple-300 focus:outline-none focus:border-[#FF6B35] focus:ring-2 focus:ring-[#FF6B35]/50 transition-all"
+                          disabled={isSubmitting}
+                          required
+                        />
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+                          className="absolute right-3 top-1/2 -translate-y-1/2"
+                        >
+                          <Sparkles className="w-5 h-5 text-[#FF6B35]" />
+                        </motion.div>
+                      </div>
+
                       <div className="relative">
                         <input
                           type="email"
@@ -347,3 +375,4 @@ export function HalloweenPopup() {
     </AnimatePresence>
   )
 }
+
