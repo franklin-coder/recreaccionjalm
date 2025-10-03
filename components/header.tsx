@@ -1,4 +1,5 @@
 
+
 'use client'
 
 import { useState } from 'react'
@@ -40,20 +41,23 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-lg border-b border-gray-200">
       <div className="container-jalm">
-        {/* Top bar */}
-        <div className="hidden md:flex items-center justify-between py-2 text-sm border-b border-gray-100">
-          <div className="flex items-center space-x-6 text-gray-600">
+        {/* Top bar - Now visible on all screen sizes */}
+        <div className="flex flex-col md:flex-row items-center justify-between py-2 text-sm border-b border-gray-100 gap-2">
+          {/* Phone numbers - Stacked on mobile, side by side on desktop */}
+          <div className="flex flex-col md:flex-row items-center md:space-x-6 text-gray-600 gap-1 md:gap-0">
             <div className="flex items-center space-x-2">
               <Phone className="h-4 w-4 text-jalm-orange" />
-              <span>PBX: 60 4 444 86 93</span>
+              <span className="text-xs md:text-sm">PBX: 60 4 444 86 93</span>
             </div>
             <div className="flex items-center space-x-2">
               <Phone className="h-4 w-4 text-jalm-teal" />
-              <span>WhatsApp: 318 548 18 66</span>
+              <span className="text-xs md:text-sm">WhatsApp: 318 548 18 66</span>
             </div>
           </div>
-          <div className="flex items-center space-x-4">
-            <div className="text-gray-600">
+          
+          {/* Experience and Admin - Side by side on all screens */}
+          <div className="flex items-center space-x-3 md:space-x-4">
+            <div className="text-gray-600 text-xs md:text-sm">
               <span className="font-semibold text-jalm-orange">30+ años</span> de experiencia
             </div>
             
@@ -62,7 +66,7 @@ export function Header() {
               {!isAuthenticated ? (
                 <button
                   onClick={() => setShowLoginModal(true)}
-                  className="bg-gray-800 hover:bg-gray-900 text-white px-3 py-1.5 rounded-full shadow-md flex items-center space-x-2 transition-colors text-xs font-semibold"
+                  className="bg-gray-800 hover:bg-gray-900 text-white px-2.5 md:px-3 py-1.5 rounded-full shadow-md flex items-center space-x-1.5 md:space-x-2 transition-colors text-xs font-semibold"
                 >
                   <Shield className="h-3.5 w-3.5" />
                   <span>Admin</span>
@@ -71,10 +75,11 @@ export function Header() {
                 <>
                   <button
                     onClick={() => setShowAdminMenu(!showAdminMenu)}
-                    className="bg-jalm-orange hover:bg-jalm-orange/90 text-white px-3 py-1.5 rounded-full shadow-md flex items-center space-x-2 transition-colors text-xs font-semibold"
+                    className="bg-jalm-orange hover:bg-jalm-orange/90 text-white px-2.5 md:px-3 py-1.5 rounded-full shadow-md flex items-center space-x-1.5 md:space-x-2 transition-colors text-xs font-semibold"
                   >
                     <User className="h-3.5 w-3.5" />
-                    <span>Hola {adminName}</span>
+                    <span className="hidden sm:inline">Hola {adminName}</span>
+                    <span className="sm:hidden">{adminName}</span>
                   </button>
 
                   <AnimatePresence>
