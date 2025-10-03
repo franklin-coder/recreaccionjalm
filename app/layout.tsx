@@ -4,6 +4,7 @@ import { Montserrat } from 'next/font/google'
 import './globals.css'
 import { Header } from '@/components/header'
 import { Footer } from '@/components/footer'
+import { HalloweenPopup } from '@/components/halloween-popup'
 import { AuthProvider } from '@/contexts/auth-context'
 
 const montserrat = Montserrat({ 
@@ -42,6 +43,7 @@ export default function RootLayout({
             {children}
           </main>
           <Footer />
+          <HalloweenPopup />
         </AuthProvider>
       </body>
     </html>

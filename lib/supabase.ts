@@ -77,3 +77,12 @@ export interface ContactRequest {
   created_at?: string
   updated_at?: string
 }
+
+export interface NewsletterSubscriber {
+  id: string
+  email: string
+  subscribed_at: string
+  source: string
+  created_at?: string
+  updated_at?: string
+}
