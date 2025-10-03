@@ -67,7 +67,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <div className="bg-white/20 p-2 rounded-lg">
                   <Lock className="h-6 w-6 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Acceso Admin</h2>
+                <h2 className="text-2xl font-bold text-black text-center ml-5">Acceso Admin</h2>
               </div>
               <button
                 onClick={onClose}
@@ -90,6 +90,8 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
                 <p className="text-sm text-red-700">{error}</p>
               </motion.div>
             )}
+
+            
 
             <div>
               <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-2">
@@ -138,7 +140,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
               <button
                 type="submit"
                 disabled={loading}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-jalm-orange to-jalm-teal text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-black text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Ingresando...' : 'Ingresar'}
               </button>
