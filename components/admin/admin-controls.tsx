@@ -61,7 +61,7 @@ export function AdminControls() {
                     className="w-full px-4 py-3 text-left hover:bg-gray-50 flex items-center space-x-3 transition-colors"
                   >
                     <Plus className="h-5 w-5 text-jalm-teal" />
-                    <span className="font-medium text-gray-700">Agregar Producto</span>
+                    <span className="font-medium text-gray-700"> Producto</span>
                   </button>
                   <div className="border-t border-gray-200" />
                   <button

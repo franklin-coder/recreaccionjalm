@@ -239,7 +239,7 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
                 <div className="bg-white/20 p-2 rounded-lg">
                   <Plus className="h-6 w-6 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-white">Agregar Producto</h2>
+                <h2 className="text-2xl font-bold text-black">Agregar Producto</h2>
               </div>
               <button
                 onClick={onClose}
@@ -645,7 +645,7 @@ export function AddProductModal({ isOpen, onClose }: AddProductModalProps) {
               <button
                 type="submit"
                 disabled={loading || success || uploadingImages}
-                className="flex-1 px-4 py-3 bg-gradient-to-r from-jalm-orange to-jalm-teal text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                className="flex-1 px-4 py-3 bg-black text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {uploadingImages ? 'Subiendo imágenes...' : loading ? 'Agregando...' : success ? '¡Agregado!' : 'Agregar Producto'}
               </button>
